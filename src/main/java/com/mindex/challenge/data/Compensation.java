@@ -14,10 +14,7 @@ public class Compensation {
     private String salary;
     private Date effectiveDate;
 
-    public Compensation(Employee employee, String salary, Date effectiveDate) {
-        this.employee = employee;
-        this.salary = salary;
-        this.effectiveDate = effectiveDate;
+    public Compensation() {
     }
 
     public Employee getEmployee() {
