@@ -35,13 +35,10 @@ public class ReportingStructureServiceImplTest {
 
     private String reportingStructureUrl;
 
-
-
     @Before
     public void setup() {
         reportingStructureUrl = "http://localhost:" + port + "/reportingStructure/{id}";
     }
-
 
     @Test
     public void testRead() {
@@ -50,15 +47,14 @@ public class ReportingStructureServiceImplTest {
         //initialize test object
         ReportingStructure testReportingStructure = new ReportingStructure(employeeOne, 4);
 
-        // Read checks
+        //read checks
         ResponseEntity<ReportingStructure> readResponse = restTemplate.getForEntity(reportingStructureUrl, ReportingStructure.class, employeeOne.getEmployeeId());
         assertEquals(HttpStatus.OK, readResponse.getStatusCode());
 
-        //get read object
         ReportingStructure readReportingStructure = readResponse.getBody();
         assertNotNull(readReportingStructure);
-        assertEquals(readReportingStructure.getEmployee().getEmployeeId(), testReportingStructure.getEmployee().getEmployeeId());
-        assertEquals(readReportingStructure.getNumberOfReports(), testReportingStructure.getNumberOfReports());
+        assertEquals(readReportingStructure.getEmployee().getEmployeeId(), testReportingStructure.getEmployee().getEmployeeId()); //compare employee id
+        assertEquals(readReportingStructure.getNumberOfReports(), testReportingStructure.getNumberOfReports());                   //compare number of reports
     }
 
     @After

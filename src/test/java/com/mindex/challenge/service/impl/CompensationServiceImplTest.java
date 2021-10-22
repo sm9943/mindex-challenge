@@ -2,7 +2,6 @@ package com.mindex.challenge.service.impl;
 
 import com.mindex.challenge.dao.EmployeeRepository;
 import com.mindex.challenge.data.Compensation;
-import com.mindex.challenge.data.Employee;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -43,30 +42,31 @@ public class CompensationServiceImplTest {
 
     @Test
     public void testCreateReadUpdate() {
-        Employee employeeOne = employeeRepository.findByEmployeeId("16a596ae-edd3-4847-99fe-c4518e82c86f");
-
+        //initialize test object
         Compensation testCompensation = new Compensation();
-        testCompensation.setEmployee(employeeOne);
+        testCompensation.setEmployee(employeeRepository.findByEmployeeId("16a596ae-edd3-4847-99fe-c4518e82c86f"));
         testCompensation.setSalary("1850 USD");
         testCompensation.setEffectiveDate(new Date(1634881578));
 
-        // Create checks
+        //create checks
         ResponseEntity<Compensation> createdCompensationResponse = restTemplate.postForEntity(createCompensationUrl, testCompensation, Compensation.class);
         assertEquals(HttpStatus.OK, createdCompensationResponse.getStatusCode());
+
         Compensation createdCompensation = createdCompensationResponse.getBody();
         assertNotNull(createdCompensation);
-        assertEquals(testCompensation.getEmployee().getEmployeeId(), createdCompensation.getEmployee().getEmployeeId());
-        assertEquals(testCompensation.getSalary(), createdCompensation.getSalary());
-        assertEquals(testCompensation.getEffectiveDate(), testCompensation.getEffectiveDate());
+        assertEquals(testCompensation.getEmployee().getEmployeeId(), createdCompensation.getEmployee().getEmployeeId()); //compare employee id
+        assertEquals(testCompensation.getSalary(), createdCompensation.getSalary());                                     //compare salary
+        assertEquals(testCompensation.getEffectiveDate(), testCompensation.getEffectiveDate());                          //compare effective date
 
-        // Read checks
+        //read checks
         ResponseEntity<Compensation> readCompensationResponse = restTemplate.getForEntity(readCompensationUrl, Compensation.class, createdCompensation.getEmployee().getEmployeeId());
         assertEquals(HttpStatus.OK, readCompensationResponse.getStatusCode());
+
         Compensation readCompensation = readCompensationResponse.getBody();
         assertNotNull(readCompensation);
-        assertEquals(readCompensation.getEmployee().getEmployeeId(), createdCompensation.getEmployee().getEmployeeId());
-        assertEquals(readCompensation.getSalary(), createdCompensation.getSalary());
-        assertEquals(readCompensation.getEffectiveDate(), testCompensation.getEffectiveDate());
+        assertEquals(readCompensation.getEmployee().getEmployeeId(), createdCompensation.getEmployee().getEmployeeId()); //compare employee id
+        assertEquals(readCompensation.getSalary(), createdCompensation.getSalary());                                     //compare salary
+        assertEquals(readCompensation.getEffectiveDate(), testCompensation.getEffectiveDate());                          //compare effective date
     }
 
     @After

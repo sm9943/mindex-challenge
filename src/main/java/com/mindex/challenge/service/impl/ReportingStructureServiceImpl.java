@@ -1,6 +1,5 @@
 package com.mindex.challenge.service.impl;
 
-import com.mindex.challenge.dao.EmployeeRepository;
 import com.mindex.challenge.data.Employee;
 import com.mindex.challenge.data.ReportingStructure;
 import com.mindex.challenge.service.EmployeeService;
@@ -22,8 +21,10 @@ import java.util.List;
 public class ReportingStructureServiceImpl implements ReportingStructureService{
 
     private static final Logger LOG = LoggerFactory.getLogger(ReportingStructureServiceImpl.class);
+
     @Autowired
     private EmployeeService employeeService;
+
     private int count = 0;
 
     @Override
@@ -37,8 +38,8 @@ public class ReportingStructureServiceImpl implements ReportingStructureService{
 
     /**
      * method to get the total number of reporters to a given employee.
-     * Method uses tail-recursion to go over the list of direct reporters and count them
-     * in each iteration.
+     * Method uses tail-recursion to go over the list of direct reporters
+     * of the employee and count them in each iteration.
      **/
     private int getTotalReports(String employeeId, int count){
         LOG.debug("counting reporters for employeeId: [{}]", employeeId);
@@ -49,10 +50,14 @@ public class ReportingStructureServiceImpl implements ReportingStructureService{
         }
 
         List<Employee> directReports =  employee.getDirectReports();
+
         if (directReports != null) {
+            count = directReports.size();
             for (Employee empl : directReports) {
-                    count += employee.getDirectReports().size();
+                if(employeeService.read(empl.getEmployeeId()).getDirectReports() != null) {
+                    count += employeeService.read(empl.getEmployeeId()).getDirectReports().size();
                     getTotalReports(empl.getEmployeeId(), count);
+                }
             }
         }
         return count;
