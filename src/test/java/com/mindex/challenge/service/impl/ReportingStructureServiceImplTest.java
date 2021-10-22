@@ -74,6 +74,23 @@ public class ReportingStructureServiceImplTest {
         assertEquals(readReportingStructure.getNumberOfReports(), testReportingStructure.getNumberOfReports());                   //compare number of reports
     }
 
+    @Test
+    public void testReadZero() {
+        Employee employeeZero = employeeRepository.findByEmployeeId("62c1084e-6e34-4630-93fd-9153afb65309");
+
+        //initialize test object
+        ReportingStructure testReportingStructure = new ReportingStructure(employeeZero, 0);
+
+        //read checks
+        ResponseEntity<ReportingStructure> readResponse = restTemplate.getForEntity(reportingStructureUrl, ReportingStructure.class, employeeZero.getEmployeeId());
+        assertEquals(HttpStatus.OK, readResponse.getStatusCode());
+
+        ReportingStructure readReportingStructure = readResponse.getBody();
+        assertNotNull(readReportingStructure);
+        assertEquals(readReportingStructure.getEmployee().getEmployeeId(), testReportingStructure.getEmployee().getEmployeeId()); //compare employee id
+        assertEquals(readReportingStructure.getNumberOfReports(), testReportingStructure.getNumberOfReports());                   //compare number of reports
+    }
+
     @After
     public void teardown() {
         reportingStructureUrl = null;
