@@ -24,7 +24,6 @@ public class ReportingStructureServiceImpl implements ReportingStructureService{
     private static final Logger LOG = LoggerFactory.getLogger(ReportingStructureServiceImpl.class);
     @Autowired
     private EmployeeService employeeService;
-    private EmployeeRepository employeeRepository;
     private int count = 0;
 
     @Override
@@ -42,6 +41,8 @@ public class ReportingStructureServiceImpl implements ReportingStructureService{
      * in each iteration.
      **/
     private int getTotalReports(String employeeId, int count){
+        LOG.debug("counting reporters for employeeId: [{}]", employeeId);
+
         Employee employee = employeeService.read(employeeId);
         if(employee == null){
             throw new RuntimeException("Employee not found! Who ARE you?");
